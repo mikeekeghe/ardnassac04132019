@@ -12,4 +12,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="disclamer">Disclamer : We do not save or store your data anywhere</string>
+    <string name="go_back"><![CDATA[<< Go Back]]></string>
 </resources>

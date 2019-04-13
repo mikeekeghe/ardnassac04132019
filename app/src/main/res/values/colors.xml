@@ -3,4 +3,6 @@
     <color name="colorPrimary">#C03806</color>
     <color name="colorPrimaryDark">#470701</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="accountLogoutLabel">#fc6240</color>
+
 </resources>

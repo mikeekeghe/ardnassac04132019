@@ -97,7 +97,6 @@
             android:layout_height="wrap_content"
             android:background="#C03806"
             android:text="Login"
-            android:onClick="onClickButon"
             android:textColor="#d9e5f3"
             android:textStyle="bold"
             android:gravity="center"
