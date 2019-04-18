@@ -27,7 +27,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="10dp"
-                android:scaleType="centerCrop"
+
                 android:src="@drawable/capture" />
         </TableRow>
 
@@ -54,14 +54,6 @@
             android:background="#FFFFFF">
 
             <TextView
-                android:id="@+id/Name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="User Name: " />
-
-            <TextView
                 android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,51 +62,53 @@
                 android:text="Age" />
         </TableRow>
 
-
-  <TableRow
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF">
 
-            <TextView
-                android:id="@+id/folCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="No. of Followers: " />
-
-            <TextView
+             <TextView
                 android:id="@+id/tvFolCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="folCount" />
+                android:text="Age" />
         </TableRow>
-
-
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF">
-            <Button
-                android:id="@+id/logout_button"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
 
-                android:layout_height="wrap_content"
-                android:onClick="onLogout"
-                android:text="@string/go_back"
-                android:textAllCaps="false"
-                android:textColor="@color/accountLogoutLabel"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
+            <ImageButton
+                android:id="@+id/btnFollowers"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/btn_followers" />
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF">
+
+            <ImageButton
+                android:id="@+id/btnUnFollowers"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/btn_unfollowers" />
+        </TableRow>
+
+
+
+
     </TableLayout>
 
 

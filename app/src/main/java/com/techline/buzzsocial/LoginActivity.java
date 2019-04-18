@@ -19,14 +19,20 @@ import java.util.Queue;
 
 import dev.niekirk.com.instagram4android.Instagram4Android;
 import dev.niekirk.com.instagram4android.requests.InstagramGetUserFollowersRequest;
+import dev.niekirk.com.instagram4android.requests.InstagramGetUserFollowingRequest;
+import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramGetUserFollowersResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoggedUser;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginResult;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUserSummary;
+import dev.niekirk.com.instagram4android.requests.payload.StatusResult;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     private static String TAG = "LOGIN";
+    private String userNameStore="", passWordStore="";
 
     SharedPreferences SP;
     EditText pswd,usrusr;
@@ -34,6 +40,13 @@ public class LoginActivity extends AppCompatActivity {
     private long longPk = 0;
     ArrayList<String> followersUserNameList = new ArrayList<String>();
     ArrayList<String> followersPicUrlList = new ArrayList<String>();
+    ArrayList<String> followersFullNameList = new ArrayList<String>();
+    ArrayList<String> followersPkList = new ArrayList<String>();
+
+    ArrayList<String> followingUserNameList = new ArrayList<String>();
+    ArrayList<String> followingPicUrlList = new ArrayList<String>();
+    ArrayList<String> followingFullNameList = new ArrayList<String>();
+    ArrayList<String> followingPkList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +98,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "myStatus is " + myStatus);
                     if (myStatus.equalsIgnoreCase("OK")) {
                         Log.d(TAG, "myStatus is " + myStatus);
-                        Log.d(TAG, "status is oK run again");
+                        userNameStore=usrusr.getText().toString();
+                        passWordStore=pswd.getText().toString();
                         InstagramLoggedUser logged_in_user = completeLoginResult.getLogged_in_user();
                         Log.d(TAG, "myStatus is " + myStatus);
                         String AllUsrMsg = "You are Logged in as " + logged_in_user;
-                        Toast.makeText(getApplicationContext(), AllUsrMsg, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), AllUsrMsg, Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "AllUsrMsg is " + AllUsrMsg);
                         String full_name = completeLoginResult.getLogged_in_user().full_name;
                         Log.d(TAG, "full_name is " + full_name);
@@ -104,16 +118,43 @@ public class LoginActivity extends AppCompatActivity {
                         String profile_pic_id = completeLoginResult.getLogged_in_user().profile_pic_id;
                         Log.d(TAG, "profile_pic_id is " + profile_pic_id);
 
+                        //followers starts here
                         InstagramGetUserFollowersResult allMyFollowers = instagram.sendRequest(new InstagramGetUserFollowersRequest(longPk));
                         List<InstagramUserSummary> users = allMyFollowers.getUsers();
                         for (InstagramUserSummary user : users) {
-                            Log.d(TAG, "User " + user.getUsername() + " follows "+full_name +"!");
+                            Log.d(TAG, "User Name" + user.getUsername() + " follows "+full_name +"!");
                             followersUserNameList.add(user.getUsername());
                             Log.d(TAG, "user.getProfile_pic_url() " + user.getProfile_pic_url() + " follows "+full_name +"!");
                             followersPicUrlList.add(user.getProfile_pic_url());
+                            Log.d(TAG, "user full name " + user.getFull_name() + " follows "+full_name +"!");
+                            followersFullNameList.add(user.getFull_name());
+                            Log.d(TAG, "user PK " + user.getPk() + " follows "+full_name +"!");
+                            followersPkList.add(user.getFull_name());
                         }
                         int no_of_followers = allMyFollowers.getUsers().size() + 1;
                         Log.d(TAG, "no_of_followers >> "+no_of_followers);
+
+                        //followers ends here
+
+                        //following starts here
+                        StatusResult allImFollowing = instagram.sendRequest(new InstagramGetUserFollowingRequest(longPk));
+                        List<InstagramUserSummary> usersImFollowing = ((InstagramGetUserFollowersResult) allImFollowing).getUsers();
+                        for (InstagramUserSummary user2 : usersImFollowing) {
+                            Log.d(TAG, "User Name" + user2.getUsername() + " is followed by "+full_name +"!");
+                            followingUserNameList.add(user2.getUsername());
+                           Log.d(TAG, "user.getProfile_pic_url() " + user2.getProfile_pic_url() + " is followed by "+full_name +"!");
+                            followingPicUrlList.add(user2.getProfile_pic_url());
+                            Log.d(TAG, "user full name " + user2.getFull_name() + " is followed by "+full_name +"!");
+                            followingFullNameList.add(user2.getFull_name());
+                            Log.d(TAG, "user PK " + user2.getPk() + " is also followed by "+full_name +"!");
+                            followingPkList.add(user2.getFull_name());
+
+                        }
+                        int no_of_following = allMyFollowers.getUsers().size() + 1;
+                        Log.d(TAG, "no_of_following >> "+no_of_following);
+
+                        //following ends here
+
                         Intent it = new Intent(LoginActivity.this, HomeActivity.class);
                         it.putExtra("full_name", full_name);
                         it.putExtra("profile_pic_url", profile_pic_url);
@@ -123,6 +164,16 @@ public class LoginActivity extends AppCompatActivity {
                         it.putExtra("followersUserNameList", followersUserNameList);
                         it.putExtra("no_of_followers", no_of_followers);
                         it.putExtra("followersPicUrlList", followersPicUrlList);
+                        it.putExtra("followersFullNameList", followersFullNameList);
+                        it.putExtra("followersPkList", followersPkList);
+
+                        it.putExtra("followingUserNameList", followingUserNameList);
+                        it.putExtra("no_of_following", no_of_following);
+                        it.putExtra("followingPicUrlList", followingPicUrlList);
+                        it.putExtra("followingFullNameList", followingFullNameList);
+                        it.putExtra("followingPkList", followingPkList);
+                        it.putExtra("userNameStore", userNameStore);
+                        it.putExtra("passWordStore", passWordStore);
 
                         startActivity(it);
                         finish();
