@@ -1,9 +1,5 @@
 package com.techline.buzzsocial;
 
-/**
- * Created by User on 3/14/2017.
- */
-
 public class Person {
     private String full_name;
     private String user_name;

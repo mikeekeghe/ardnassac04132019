@@ -46,21 +46,15 @@
             android:gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="16dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/btn_follow"
-            android:layout_height="30dp"
-            android:layout_width="100dp" />
+            android:onClick="onClickFollowButonSwitcher"
+ />
 
-      <!--  <TextView
-            android:gravity="center"
-            android:text="textView2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/btnFollow"
-            android:visibility="invisible"
-            />-->
+
 
     </LinearLayout>
 

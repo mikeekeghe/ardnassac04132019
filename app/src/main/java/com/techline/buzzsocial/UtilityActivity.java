@@ -92,7 +92,7 @@ public class UtilityActivity extends AppCompatActivity {
             userNameStore = extras.getString("userNameStore");
             passWordStore = extras.getString("passWordStore");
             Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
-            Log.d(TAG, "my followingPkList from Extra is :" + passWordStore);
+            Log.d(TAG, "my passWordStore from Extra is :" + passWordStore);
             Log.d(TAG, "my flag from Extra is :" + flag);
 
 

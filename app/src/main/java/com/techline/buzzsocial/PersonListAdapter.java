@@ -2,7 +2,9 @@ package com.techline.buzzsocial;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,16 +37,20 @@ import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest
 import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by User on 3/14/2017.
  */
 
 public class PersonListAdapter extends ArrayAdapter<Person> {
+    public static final String MyPREFERENCES = "shared preferences";
+
+    Context mContext;
 
     private static final String TAG = "PersonListAdapter";
     ArrayList<String> UsersToFollowArrayList = new ArrayList<String>();
 
-    private Context mContext;
     private int mResource;
     private int lastPosition = -1;
     private Context context;
@@ -51,6 +58,7 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
     String user_name;
     //ViewHolder object
     ViewHolder holder;
+
 
     /**
      * Holds variables in a View
@@ -72,6 +80,7 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
+
     }
 
     @NonNull
@@ -129,7 +138,7 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
 
         //create the imageloader object
         ImageLoader imageLoader = ImageLoader.getInstance();
-        ;
+
         int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
 
         //create display options
@@ -146,20 +155,29 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
         holder.ivImagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.ivImagebutton.setImageResource(R.drawable.btn_unfollow);
-                UsersToFollowArrayList.add(user_name);
-               /* Intent intent = new Intent(mContext.getApplicationContext(), UtilityActivity.class);
-                intent.putExtra("user_to_follow", user_name);
-                intent.putExtra("flag", "FOLLOW");
-                mContext.startActivity(intent);*/
-                Toast.makeText(mContext, user_name, Toast.LENGTH_SHORT).show();
+                UsersToFollowArrayList.add(getItem(position).getUser_name());
+                Log.d(TAG,"UsersToFollowArrayList" + UsersToFollowArrayList);
+                Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
 
+                intent.putExtra("flag", "UNFOLLOW");
+                intent.putExtra("UsersToFollowArrayList", UsersToFollowArrayList);
+//                saveData();
+               Toast.makeText(mContext, getItem(position).getUser_name(), Toast.LENGTH_SHORT).show();
+                mContext.startActivity(intent);
             }
         });
         return convertView;
 
 
     }
+
+/*    private void saveData() {
+        SharedPreferences.Editor editor = SP.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(UsersToFollowArrayList);
+        editor.putString("task list", json);
+        editor.apply();
+    }*/
 
 
     /**

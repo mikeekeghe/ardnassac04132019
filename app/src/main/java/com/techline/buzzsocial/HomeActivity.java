@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
             userNameStore = extras.getString("userNameStore");
             passWordStore = extras.getString("passWordStore");
             Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
-            Log.d(TAG, "my followingPkList from Extra is :" + passWordStore);
+            Log.d(TAG, "my passWordStore from Extra is :" + passWordStore);
 
 
         } else {
@@ -161,6 +161,7 @@ public class HomeActivity extends AppCompatActivity {
                 it.putExtra("followingPkList", followingPkList);
                 it.putExtra("userNameStore", userNameStore);
                 it.putExtra("passWordStore", passWordStore);
+                it.putExtra("flag", "FOLLOW");
                 startActivity(it);
                 finish();
             }
@@ -188,6 +189,7 @@ public class HomeActivity extends AppCompatActivity {
                 it.putExtra("followingPkList", followingPkList);
                 it.putExtra("userNameStore", userNameStore);
                 it.putExtra("passWordStore", passWordStore);
+                it.putExtra("flag", "UNFOLLOW");
                 startActivity(it);
                 finish();
             }

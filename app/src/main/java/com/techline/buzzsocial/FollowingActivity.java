@@ -1,16 +1,35 @@
 package com.techline.buzzsocial;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class FollowingActivity extends AppCompatActivity {
+import dev.niekirk.com.instagram4android.Instagram4Android;
+import dev.niekirk.com.instagram4android.requests.InstagramFollowRequest;
+import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 
+public class FollowingActivity extends AppCompatActivity {
+    public static final String MyPREFERENCES = "shared preferences";
+
+    SharedPreferences SP;
+    ImageButton btnFollow;
 
     private static final String TAG = "FOLLOWING";
     private Bundle extras;
@@ -24,12 +43,16 @@ public class FollowingActivity extends AppCompatActivity {
     ArrayList<String> followingPicUrlList = new ArrayList<String>();
     ArrayList<String> followingPkList = new ArrayList<String>();
     ArrayList<String> followingFullNameList = new ArrayList<String>();
-    private int no_of_following;
+    ArrayList<String> UsersToUnFollowArrayList = new ArrayList<String>();
+
+    private String no_of_following;
 
     ArrayList<Person> peopleList = new ArrayList<>();
     private String no_of_followers;
     int counter = 0;
     TextView tvData;
+    private Context mContext;
+    private String userNameStore="", passWordStore="", flag="";
 
 
     @Override
@@ -52,8 +75,9 @@ public class FollowingActivity extends AppCompatActivity {
             followersFullNameList = extras.getStringArrayList("followersFullNameList");
             followersPkList = extras.getStringArrayList("followersPkList");
 
-            no_of_following = extras.getInt("no_of_following");
+            no_of_following = extras.getString("no_of_following");
             followingUserNameList = extras.getStringArrayList("followingUserNameList");
+            UsersToUnFollowArrayList = extras.getStringArrayList("UsersToUnfollowArrayList");
             followingPicUrlList = extras.getStringArrayList("followingPicUrlList");
             followingFullNameList = extras.getStringArrayList("followingFullNameList");
             followingPkList = extras.getStringArrayList("followingPkList");
@@ -73,6 +97,14 @@ public class FollowingActivity extends AppCompatActivity {
             Log.d(TAG, "my followingPicUrlList from Extra is :" + followingPicUrlList);
             Log.d(TAG, "my followingFullNameList from Extra is :" + followingFullNameList);
             Log.d(TAG, "my followingPkList from Extra is :" + followingPkList);
+            userNameStore = extras.getString("userNameStore");
+            passWordStore = extras.getString("passWordStore");
+            flag = extras.getString("flag");
+            UsersToUnFollowArrayList = extras.getStringArrayList("UsersToUnfollowArrayList");
+            Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
+            Log.d(TAG, "my passWordStore from Extra is :" + passWordStore);
+            Log.d(TAG, "my flag from Extra is :" + flag);
+            Log.d(TAG, "my UsersToUnFollowArrayList from Extra is :" + UsersToUnFollowArrayList);
 
         } else {
             return;
@@ -84,13 +116,16 @@ tvData.setText(no_of_following + " Fans who are not following you ");
 
     private void loadDataInListView(ListView mListView) {
         //create people objects
-        for (counter = 0; counter < followingPkList.size(); counter++) {
-            Person personName = new Person((followingFullNameList.get(counter)),
-                    (followingUserNameList.get(counter)), (followingPkList.get(counter)),
-                    (followingPicUrlList.get(counter)));
+        if (followingPkList !=null){
+            for (counter = 0; counter < followingPkList.size(); counter++) {
+                Person personName = new Person((followingFullNameList.get(counter)),
+                        (followingUserNameList.get(counter)), (followingPkList.get(counter)),
+                        (followingPicUrlList.get(counter)));
 
-            //add objects to arraylist
-            peopleList.add(personName);
+                //add objects to arraylist
+                peopleList.add(personName);
+        }
+
         }
         //use new arrayList to populate listview
         PersonListAdapterUnfollow adapter = new PersonListAdapterUnfollow(this, R.layout.adapter_view_layout_2, peopleList);
@@ -121,4 +156,68 @@ tvData.setText(no_of_following + " Fans who are not following you ");
         finish();
 
     }
+
+    public void onClickDone(View view) {
+        Log.d(TAG,"inside onClicDoneButon");
+        boolean status =false;
+        loadData();
+        for (int x = 0; x < UsersToUnFollowArrayList.size(); x++) {
+            String user_to_unfollow = UsersToUnFollowArrayList.get(x);
+            status = unfollowMyUser(userNameStore, passWordStore,user_to_unfollow);
+        }
+        Log.d(TAG,"inside status >>"+ status);
+
+        Toast.makeText(mContext, "unfollowed Succesfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void loadData() {
+        SharedPreferences.Editor editor = SP.edit();
+        Gson gson = new Gson();
+        String json = SP.getString("task list", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        UsersToUnFollowArrayList = gson.fromJson(json, type);
+        if (UsersToUnFollowArrayList == null) {
+            UsersToUnFollowArrayList = new ArrayList<>();
+        }
+    }
+
+    public boolean unfollowMyUser(String userNameStore, String passWordStore, String user_to_unfollow)
+
+    {
+        boolean answer =false;
+                //follow request
+        Instagram4Android instagram = Instagram4Android.builder().username(userNameStore).password(passWordStore).build();
+        InstagramSearchUsernameResult result = null;
+        try {
+            result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_to_unfollow));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InstagramUser user = result.getUser();
+        try {
+            instagram.sendRequest(new InstagramFollowRequest(user.getPk()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+         answer = true;
+        return answer;
+    }
+
+    public void onClickFollowButonSwitcher(View view) {
+        btnFollow = findViewById(R.id.btnFollow);
+        if (flag == "FOLLOW"){
+            Log.d(TAG,"inside flag checker >> follow");
+            btnFollow.setImageResource(R.drawable.btn_unfollow);
+            Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
+        }else if (flag == "UNFOLLOW"){
+            Log.d(TAG,"inside flag checker >> follow");
+            btnFollow.setImageResource(R.drawable.btn_follow);
+            Toast.makeText(mContext, "Un-Followed Succesfully", Toast.LENGTH_SHORT).show();
+        }else{
+
+        }
+    }
+
 }

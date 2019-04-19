@@ -1,15 +1,35 @@
 package com.techline.buzzsocial;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import dev.niekirk.com.instagram4android.Instagram4Android;
+import dev.niekirk.com.instagram4android.requests.InstagramFollowRequest;
+import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
+
 public class FollowersActivity extends AppCompatActivity {
+    public static final String MyPREFERENCES = "shared preferences";
+
+    SharedPreferences SP;
+    ImageButton btnFollow;
 
     private static final String TAG = "FOLLOWERS";
     private Bundle extras;
@@ -23,12 +43,17 @@ public class FollowersActivity extends AppCompatActivity {
     ArrayList<String> followingPicUrlList = new ArrayList<String>();
     ArrayList<String> followingPkList = new ArrayList<String>();
     ArrayList<String> followingFullNameList = new ArrayList<String>();
+    ArrayList<String> UsersToFollowArrayList = new ArrayList<String>();
+    ArrayList<String> UsersTofollowArrayList = new ArrayList<String>();
     private String no_of_following;
 
     ArrayList<Person> peopleList = new ArrayList<>();
     private String no_of_followers;
     int counter = 0;
     TextView tvData;
+    private Context mContext;
+    private String userNameStore="", passWordStore="", flag="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +77,7 @@ public class FollowersActivity extends AppCompatActivity {
 
             no_of_following = extras.getString("no_of_following");
             followingUserNameList = extras.getStringArrayList("followingUserNameList");
+            UsersToFollowArrayList = extras.getStringArrayList("pubKey");
             followingPicUrlList = extras.getStringArrayList("followingPicUrlList");
             followingFullNameList = extras.getStringArrayList("followingFullNameList");
             followingPkList = extras.getStringArrayList("followingPkList");
@@ -71,7 +97,15 @@ public class FollowersActivity extends AppCompatActivity {
             Log.d(TAG, "my followingPicUrlList from Extra is :" + followingPicUrlList);
             Log.d(TAG, "my followingFullNameList from Extra is :" + followingFullNameList);
             Log.d(TAG, "my followingPkList from Extra is :" + followingPkList);
+            userNameStore = extras.getString("userNameStore");
+            passWordStore = extras.getString("passWordStore");
+            flag = extras.getString("flag");
+            UsersToFollowArrayList = extras.getStringArrayList("UsersTofollowArrayList");
 
+            Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
+            Log.d(TAG, "my passWordStore from Extra is :" + passWordStore);
+            Log.d(TAG, "my flag from Extra is :" + flag);
+            Log.d(TAG, "my UsersTofollowArrayList from Extra is :" + UsersToFollowArrayList);
         } else {
             return;
         }
@@ -119,5 +153,67 @@ public class FollowersActivity extends AppCompatActivity {
         startActivity(it);
         finish();
 
+    }
+
+    public void onClickDone(View view) {
+        Log.d(TAG,"inside onClicDoneButon");
+        boolean status =false;
+        loadData();
+        for (int x = 0; x < UsersToFollowArrayList.size(); x++) {
+            String user_to_follow = UsersToFollowArrayList.get(x);
+            status = followMyUser(userNameStore, passWordStore,user_to_follow);
+        }
+        Log.d(TAG,"inside status >>"+ status);
+            Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void loadData() {
+        SharedPreferences.Editor editor = SP.edit();
+        Gson gson = new Gson();
+        String json = SP.getString("task list", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        UsersToFollowArrayList = gson.fromJson(json, type);
+        if (UsersToFollowArrayList == null) {
+            UsersToFollowArrayList = new ArrayList<>();
+        }
+    }
+
+    public boolean followMyUser(String userNameStore, String passWordStore, String user_to_follow)
+
+    {
+        boolean answer =false;
+                //follow request
+        Instagram4Android instagram = Instagram4Android.builder().username(userNameStore).password(passWordStore).build();
+        InstagramSearchUsernameResult result = null;
+        try {
+            result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_to_follow));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InstagramUser user = result.getUser();
+        try {
+            instagram.sendRequest(new InstagramFollowRequest(user.getPk()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        answer = true;
+        return answer;
+    }
+
+    public void onClickFollowButonSwitcher(View view) {
+        btnFollow = findViewById(R.id.btnFollow);
+        if (flag == "FOLLOW"){
+            Log.d(TAG,"inside flag checker >> follow");
+            btnFollow.setImageResource(R.drawable.btn_unfollow);
+            Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
+        }else if (flag == "UNFOLLOW"){
+            Log.d(TAG,"inside flag checker >> follow");
+            btnFollow.setImageResource(R.drawable.btn_follow);
+            Toast.makeText(mContext, "Un-Followed Succesfully", Toast.LENGTH_SHORT).show();
+        }else{
+
+        }
     }
 }

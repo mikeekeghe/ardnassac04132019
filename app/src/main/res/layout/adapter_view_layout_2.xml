@@ -40,35 +40,21 @@
                 android:textSize="8dp"
                 android:layout_below="@+id/textView1"/>
         </LinearLayout>
-       <!-- <TextView
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:text="TextView1"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:id="@+id/textView1"
-            android:layout_weight="50"/>-->
+
         <ImageButton
             android:id="@+id/btnFollow"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginRight="16dp"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/btn_unfollow"
-            android:layout_height="30dp"
-            android:layout_width="100dp" />
+            android:onClick="onClickFollowButonSwitcher"
+         />
 
-      <!--  <TextView
-            android:gravity="center"
-            android:text="textView2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/btnFollow"
-            android:visibility="invisible"
-            />-->
+
 
     </LinearLayout>
 

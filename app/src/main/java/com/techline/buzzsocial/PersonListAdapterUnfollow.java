@@ -2,7 +2,11 @@ package com.techline.buzzsocial;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +15,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,11 +29,16 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 class PersonListAdapterUnfollow extends ArrayAdapter<Person> {
+//    public static final String MyPREFERENCES = "shared preferences";
 
-    private static final String TAG = "PersonListAdapterUnfollow";
+    private static Context mContext;
+//    private static SharedPreferences SP= PreferenceManager.getDefaultSharedPreferences(mContext);
 
-    private Context mContext;
+    private static final String TAG = "PersonListAdapter";
+
     private int mResource;
     private int lastPosition = -1;
     private Context context;
@@ -57,6 +68,8 @@ class PersonListAdapterUnfollow extends ArrayAdapter<Person> {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
+
+
     }
 
     @NonNull
@@ -125,21 +138,32 @@ class PersonListAdapterUnfollow extends ArrayAdapter<Person> {
         holder.ivImagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.ivImagebutton.setImageResource(R.drawable.btn_follow);
 
-                UsersToUnfollowArrayList.add(user_name);
-               /* Intent intent = new Intent(mContext.getApplicationContext(), UtilityActivity.class);
-                intent.putExtra("user_to_unfollow", user_name);
+                UsersToUnfollowArrayList.add(getItem(position).getUser_name());
+
+                Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
+
                 intent.putExtra("flag", "UNFOLLOW");
-                mContext.startActivity(intent);*/
-                Toast.makeText(mContext, user_name, Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("UsersToUnfollowArrayList", UsersToUnfollowArrayList);
+                Log.d(TAG,"UsersToUnfollowArrayList" + UsersToUnfollowArrayList);
+//                saveData();
+                Toast.makeText(mContext, getItem(position).getUser_name(), Toast.LENGTH_SHORT).show();
+                mContext.startActivity(intent);
             }
         });
         return convertView;
 
 
     }
+
+/*    private void saveData() {
+        SharedPreferences.Editor editor = SP.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(UsersToUnfollowArrayList);
+        editor.putString("task list", json);
+        editor.apply();
+    }*/
+
 
 
     /**

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.StrictMode;
 import android.widget.Toast;
@@ -33,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     private static String TAG = "LOGIN";
     private String userNameStore="", passWordStore="";
-
     SharedPreferences SP;
     EditText pswd,usrusr;
     TextView sup,lin;
@@ -47,7 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     ArrayList<String> followingPicUrlList = new ArrayList<String>();
     ArrayList<String> followingFullNameList = new ArrayList<String>();
     ArrayList<String> followingPkList = new ArrayList<String>();
-
+    int progress = 0;
+    ProgressBar simpleProgressBar;
+    int maxValue = 0;
+    int progressValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +59,13 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        simpleProgressBar=(ProgressBar) findViewById(R.id.progressbar); // initiate the progress bar
+        maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
+        progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
+         lin = findViewById(R.id.lin);
+        simpleProgressBar.setMax(100); // 100 maximum value for the progress bar
+        simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
 
-        lin = findViewById(R.id.lin);
         usrusr = findViewById(R.id.usrusr);
         pswd = findViewById(R.id.pswrdd);
         sup = findViewById(R.id.sup);
@@ -74,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if (usrusr.getText().toString().trim().length() == 0) {
+               if (usrusr.getText().toString().trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Username is missing.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -82,6 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password is missing.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                simpleProgressBar.setVisibility(View.VISIBLE);
+                setProgressValue(progress);
                 Instagram4Android instagram = Instagram4Android.builder().username(usrusr.getText().toString()).password(pswd.getText().toString()).build();
                 Log.d(TAG, "Before Setup");
                 instagram.setup();
@@ -150,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                             followingPkList.add(user2.getFull_name());
 
                         }
-                        int no_of_following = allMyFollowers.getUsers().size() + 1;
+                        int no_of_following = ((InstagramGetUserFollowersResult) allImFollowing).getUsers().size() + 1;
                         Log.d(TAG, "no_of_following >> "+no_of_following);
 
                         //following ends here
@@ -202,4 +212,24 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickButon(View view)  {
 
-    }}
+    }
+
+    private void setProgressValue(final int progress) {
+
+        // set the progress
+        simpleProgressBar.setProgress(progress);
+        // thread is used to change the progress value
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                setProgressValue(progress + 10);
+            }
+        });
+        thread.start();
+    }
+}
