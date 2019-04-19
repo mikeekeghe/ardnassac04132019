@@ -75,22 +75,7 @@ TextView textView;
             user_to_follow = extras.getString("user_to_follow");
             user_to_unfollow = extras.getString("user_to_unfollow");
             flag = extras.getString("flag");
-            Log.d(TAG, "my full_name from Extra is :" + full_name);
-            Log.d(TAG, "my profile_pic_url from Extra is :" + profile_pic_url);
-            Log.d(TAG, "my usernameInsta from Extra is :" + usernameInsta);
-            Log.d(TAG, "my pk from Extra is :" + pk);
-            Log.d(TAG, "my profile_pic_id from Extra is :" + profile_pic_id);
-            Log.d(TAG, "my no_of_followers from Extra is :" + no_of_followers);
-            Log.d(TAG, "my followersUserNameList from Extra is :" + followersUserNameList);
-            Log.d(TAG, "my followersPicUrlList from Extra is :" + followersPicUrlList);
-            Log.d(TAG, "my followersFullNameList from Extra is :" + followersFullNameList);
-            Log.d(TAG, "my followersPkList from Extra is :" + followersPkList);
-            Log.d(TAG, "my no_of_following from Extra is :" + no_of_following);
-            Log.d(TAG, "my followingUserNameList from Extra is :" + followingUserNameList);
-            Log.d(TAG, "my followingPicUrlList from Extra is :" + followingPicUrlList);
-            Log.d(TAG, "my followingFullNameList from Extra is :" + followingFullNameList);
-            Log.d(TAG, "my followingPkList from Extra is :" + followingPkList);
-            Log.d(TAG, "my user_to_follow from Extra is :" + user_to_follow);
+
             userNameStore = extras.getString("userNameStore");
             passWordStore = extras.getString("passWordStore");
             Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
@@ -116,8 +101,24 @@ TextView textView;
         }
         textView.setText("Processing");
         Log.d(TAG,"followMyUser status >> "+status);
-        Intent intent = new Intent(this, FollowersActivity.class);
-        startActivity(intent);
+        Intent it = new Intent(this, FollowersActivity.class);
+        it.putExtra("full_name", full_name);
+        it.putExtra("profile_pic_url", profile_pic_url);
+        it.putExtra("usernameInsta", usernameInsta);
+        it.putExtra("pk", pk);
+        it.putExtra("profile_pic_id", profile_pic_id);
+        it.putExtra("followersUserNameList", followersUserNameList);
+        it.putExtra("no_of_followers", no_of_followers);
+        it.putExtra("followersPicUrlList", followersPicUrlList);
+        it.putExtra("followersFullNameList", followersFullNameList);
+        it.putExtra("followersPkList", followersPkList);
+        it.putExtra("followingUserNameList", followingUserNameList);
+        it.putExtra("no_of_following", no_of_following);
+        it.putExtra("followingPicUrlList", followingPicUrlList);;
+        it.putExtra("followingFullNameList", followingFullNameList);
+        it.putExtra("followingPkList", followingPkList);
+
+        startActivity(it);
     }
 
     public boolean followMyUser(String user, String pass, String user_2_follow) throws IOException,NullPointerException {

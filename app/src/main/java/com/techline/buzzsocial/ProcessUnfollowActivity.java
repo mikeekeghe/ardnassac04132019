@@ -113,8 +113,23 @@ public class ProcessUnfollowActivity extends AppCompatActivity {
         }
         Log.d(TAG,"unfollowMyUser status >> "+status);
 
-        Intent intent = new Intent(this, FollowingActivity.class);
-        mContext.startActivity(intent);
+        Intent it = new Intent(this, FollowingActivity.class);
+        it.putExtra("full_name", full_name);
+        it.putExtra("profile_pic_url", profile_pic_url);
+        it.putExtra("usernameInsta", usernameInsta);
+        it.putExtra("pk", pk);
+        it.putExtra("profile_pic_id", profile_pic_id);
+        it.putExtra("followersUserNameList", followersUserNameList);
+        it.putExtra("no_of_followers", no_of_followers);
+        it.putExtra("followersPicUrlList", followersPicUrlList);
+        it.putExtra("followersFullNameList", followersFullNameList);
+        it.putExtra("followersPkList", followersPkList);
+        it.putExtra("followingUserNameList", followingUserNameList);
+        it.putExtra("no_of_following", no_of_following);
+        it.putExtra("followingPicUrlList", followingPicUrlList);;
+        it.putExtra("followingFullNameList", followingFullNameList);
+        it.putExtra("followingPkList", followingPkList);
+        mContext.startActivity(it);
 
     }
 

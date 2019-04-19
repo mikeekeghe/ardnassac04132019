@@ -2,31 +2,28 @@ package com.techline.buzzsocial;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import dev.niekirk.com.instagram4android.requests.InstagramGetUserFollowersRequest;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramGetUserFollowersResult;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramUserSummary;
 
 public class HomeActivity extends AppCompatActivity {
+    public static final String MyPREFERENCES = "shared preferences";
 
+    SharedPreferences SP;
     private static final String TAG = "HomeActivity";
     private TextView mTextMessage;
 
@@ -88,8 +85,8 @@ public class HomeActivity extends AppCompatActivity {
     };
     private Bundle extras;
     private String full_name="",profile_pic_url=""
-    ,usernameInsta="",pk="",profile_pic_id="";
-    TextView tvDisplay_name, tvUserName, tvFolCount;
+            ,usernameInsta="",pk="",profile_pic_id="";
+    TextView tvDisplay_name, tvUserName, tvLogout;
     ImageView ivThumb;
     ImageButton btnFollowers, btnUnFollowers;
     ArrayList<String> followersUserNameList = new ArrayList<String>();
@@ -134,25 +131,10 @@ public class HomeActivity extends AppCompatActivity {
             followingPicUrlList = extras.getStringArrayList("followingPicUrlList");
             followingFullNameList = extras.getStringArrayList("followingFullNameList");
             followingPkList = extras.getStringArrayList("followingPkList");
-            Log.d(TAG, "my full_name from Extra is :" + full_name);
-            Log.d(TAG, "my profile_pic_url from Extra is :" + profile_pic_url);
-            Log.d(TAG, "my usernameInsta from Extra is :" + usernameInsta);
-            Log.d(TAG, "my pk from Extra is :" + pk);
-            Log.d(TAG, "my profile_pic_id from Extra is :" + profile_pic_id);
-            Log.d(TAG, "my no_of_followers from Extra is :" + no_of_followers);
-            Log.d(TAG, "my followersUserNameList from Extra is :" + followersUserNameList);
-            Log.d(TAG, "my followersPicUrlList from Extra is :" + followersPicUrlList);
-            Log.d(TAG, "my followersFullNameList from Extra is :" + followersFullNameList);
-            Log.d(TAG, "my followersPkList from Extra is :" + followersPkList);
-            Log.d(TAG, "my no_of_following from Extra is :" + no_of_following);
-            Log.d(TAG, "my followingUserNameList from Extra is :" + followingUserNameList);
-            Log.d(TAG, "my followingPicUrlList from Extra is :" + followingPicUrlList);
-            Log.d(TAG, "my followingFullNameList from Extra is :" + followingFullNameList);
-            Log.d(TAG, "my followingPkList from Extra is :" + followingPkList);
+
             userNameStore = extras.getString("userNameStore");
             passWordStore = extras.getString("passWordStore");
-            Log.d(TAG, "my userNameStore from Extra is :" + userNameStore);
-            Log.d(TAG, "my passWordStore from Extra is :" + passWordStore);
+
 
 
         } else {
@@ -162,13 +144,27 @@ public class HomeActivity extends AppCompatActivity {
         tvDisplay_name = findViewById(R.id.tvDisplay_name);
         tvUserName = findViewById(R.id.tvUserName);
         ivThumb = findViewById(R.id.ivThumb);
-        tvFolCount = findViewById(R.id.tvFolCount);
+        tvLogout = findViewById(R.id.tvFolCount);
         btnFollowers = findViewById(R.id.btnFollowers);
         btnUnFollowers = findViewById(R.id.btnUnFollowers);
 
         tvDisplay_name.setText(full_name);
-        tvUserName.setText(usernameInsta);
-        tvFolCount.setText(no_of_followers);
+        String StrFol  = no_of_followers + " followers " + "||"+no_of_following + " Fans who are not following you ";
+        tvUserName.setText(StrFol);
+        tvLogout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                SP = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = SP.edit();
+                editor.clear().commit();
+                editor.apply();
+                Intent itLogout = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(itLogout);
+                finish();
+            }
+        });
         //tvPk.setText(pk);
 
         Glide.with(this)
@@ -203,7 +199,7 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
             }
         });
-  btnUnFollowers.setOnClickListener(new View.OnClickListener()
+        btnUnFollowers.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

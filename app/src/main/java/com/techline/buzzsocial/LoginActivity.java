@@ -3,14 +3,14 @@ package com.techline.buzzsocial;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.os.StrictMode;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,27 +20,23 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import dev.niekirk.com.instagram4android.Instagram4Android;
 import dev.niekirk.com.instagram4android.requests.InstagramGetUserFollowersRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramGetUserFollowingRequest;
-import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramGetUserFollowersResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoggedUser;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginResult;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUserSummary;
 import dev.niekirk.com.instagram4android.requests.payload.StatusResult;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     private static String TAG = "LOGIN";
-    private String userNameStore="", passWordStore="";
+    private String userNameStore = "", passWordStore = "";
     SharedPreferences SP;
-    EditText pswd,usrusr;
-    TextView sup,lin;
+    EditText pswd, usrusr;
+    TextView sup, lin;
     private long longPk = 0;
     ArrayList<String> followersUserNameList = new ArrayList<String>();
     ArrayList<String> followersPicUrlList = new ArrayList<String>();
@@ -55,9 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     int maxValue = 0;
     int progressValue;
-    private String usernameInsta="",profile_pic_url="",full_name="",
-            pk="",profile_pic_id="",no_of_followers="",no_of_following =""
-           ;
+    private String usernameInsta = "", profile_pic_url = "", full_name = "",
+            pk = "", profile_pic_id = "", no_of_followers = "", no_of_following = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +62,10 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        simpleProgressBar=(ProgressBar) findViewById(R.id.progressbar); // initiate the progress bar
-        maxValue=simpleProgressBar.getMax(); // get maximum value of the progress bar
-        progressValue=simpleProgressBar.getProgress(); // get progress value from the progress bar
-         lin = findViewById(R.id.lin);
+        simpleProgressBar = (ProgressBar) findViewById(R.id.progressbar); // initiate the progress bar
+        maxValue = simpleProgressBar.getMax(); // get maximum value of the progress bar
+        progressValue = simpleProgressBar.getProgress(); // get progress value from the progress bar
+        lin = findViewById(R.id.lin);
         simpleProgressBar.setMax(100); // 100 maximum value for the progress bar
         simpleProgressBar.setProgress(50); // 50 default progress value for the progress bar
 
@@ -85,12 +80,10 @@ public class LoginActivity extends AppCompatActivity {
         pswd.setTypeface(custom_font);
 
 
-        lin.setOnClickListener(new View.OnClickListener()
-        {
+        lin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-               if (usrusr.getText().toString().trim().length() == 0) {
+            public void onClick(View v) {
+                if (usrusr.getText().toString().trim().length() == 0) {
                     Toast.makeText(getApplicationContext(), "Username is missing.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -107,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     Log.d(TAG, "Before login");
                     InstagramLoginResult completeLoginResult = instagram.login();
-                    Log.d(TAG, "completeLoginResult >>"+completeLoginResult);
+                    Log.d(TAG, "completeLoginResult >>" + completeLoginResult);
                     String myMessage = completeLoginResult.getMessage();
                     Log.d(TAG, "myMessage is " + myMessage);
                     Toast.makeText(getApplicationContext(), myMessage, Toast.LENGTH_SHORT).show();
@@ -116,8 +109,8 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "myStatus is " + myStatus);
                     if (myStatus.equalsIgnoreCase("OK")) {
                         Log.d(TAG, "myStatus is " + myStatus);
-                        userNameStore=usrusr.getText().toString();
-                        passWordStore=pswd.getText().toString();
+                        userNameStore = usrusr.getText().toString();
+                        passWordStore = pswd.getText().toString();
 
                         SP = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
                         SharedPreferences.Editor editor = SP.edit();
@@ -140,24 +133,24 @@ public class LoginActivity extends AppCompatActivity {
                         longPk = completeLoginResult.getLogged_in_user().pk;
                         pk = String.valueOf(completeLoginResult.getLogged_in_user().pk);
                         Log.d(TAG, "pk is " + pk);
-                         profile_pic_id = completeLoginResult.getLogged_in_user().profile_pic_id;
+                        profile_pic_id = completeLoginResult.getLogged_in_user().profile_pic_id;
                         Log.d(TAG, "profile_pic_id is " + profile_pic_id);
 
                         //followers starts here
                         InstagramGetUserFollowersResult allMyFollowers = instagram.sendRequest(new InstagramGetUserFollowersRequest(longPk));
                         List<InstagramUserSummary> users = allMyFollowers.getUsers();
                         for (InstagramUserSummary user : users) {
-                            Log.d(TAG, "User Name" + user.getUsername() + " follows "+full_name +"!");
+                            Log.d(TAG, "User Name" + user.getUsername() + " follows " + full_name + "!");
                             followersUserNameList.add(user.getUsername());
-                            Log.d(TAG, "user.getProfile_pic_url() " + user.getProfile_pic_url() + " follows "+full_name +"!");
+                            Log.d(TAG, "user.getProfile_pic_url() " + user.getProfile_pic_url() + " follows " + full_name + "!");
                             followersPicUrlList.add(user.getProfile_pic_url());
-                            Log.d(TAG, "user full name " + user.getFull_name() + " follows "+full_name +"!");
+                            Log.d(TAG, "user full name " + user.getFull_name() + " follows " + full_name + "!");
                             followersFullNameList.add(user.getFull_name());
-                            Log.d(TAG, "user PK " + user.getPk() + " follows "+full_name +"!");
+                            Log.d(TAG, "user PK " + user.getPk() + " follows " + full_name + "!");
                             followersPkList.add(user.getFull_name());
                         }
-                         no_of_followers = String.valueOf(allMyFollowers.getUsers().size() + 1);
-                        Log.d(TAG, "no_of_followers >> "+no_of_followers);
+                        no_of_followers = String.valueOf(allMyFollowers.getUsers().size() + 1);
+                        Log.d(TAG, "no_of_followers >> " + no_of_followers);
 
                         //followers ends here
 
@@ -165,18 +158,18 @@ public class LoginActivity extends AppCompatActivity {
                         StatusResult allImFollowing = instagram.sendRequest(new InstagramGetUserFollowingRequest(longPk));
                         List<InstagramUserSummary> usersImFollowing = ((InstagramGetUserFollowersResult) allImFollowing).getUsers();
                         for (InstagramUserSummary user2 : usersImFollowing) {
-                            Log.d(TAG, "User Name" + user2.getUsername() + " is followed by "+full_name +"!");
+                            Log.d(TAG, "User Name" + user2.getUsername() + " is followed by " + full_name + "!");
                             followingUserNameList.add(user2.getUsername());
-                           Log.d(TAG, "user.getProfile_pic_url() " + user2.getProfile_pic_url() + " is followed by "+full_name +"!");
+                            Log.d(TAG, "user.getProfile_pic_url() " + user2.getProfile_pic_url() + " is followed by " + full_name + "!");
                             followingPicUrlList.add(user2.getProfile_pic_url());
-                            Log.d(TAG, "user full name " + user2.getFull_name() + " is followed by "+full_name +"!");
+                            Log.d(TAG, "user full name " + user2.getFull_name() + " is followed by " + full_name + "!");
                             followingFullNameList.add(user2.getFull_name());
-                            Log.d(TAG, "user PK " + user2.getPk() + " is also followed by "+full_name +"!");
+                            Log.d(TAG, "user PK " + user2.getPk() + " is also followed by " + full_name + "!");
                             followingPkList.add(user2.getFull_name());
 
                         }
                         no_of_following = String.valueOf(((InstagramGetUserFollowersResult) allImFollowing).getUsers().size() + 1);
-                        Log.d(TAG, "no_of_following >> "+no_of_following);
+                        Log.d(TAG, "no_of_following >> " + no_of_following);
 
                         //following ends here
 
@@ -202,8 +195,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         startActivity(it);
                         finish();
-                    }
-                    else{
+                    } else {
                         return;
                     }
                     Log.d(TAG, "after login");
@@ -266,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void onClickButon(View view)  {
+    public void onClickButon(View view) {
 
     }
 
@@ -278,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-             
+
                 setProgressValue(progress + 10);
             }
         });
@@ -286,82 +278,89 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         SP = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        String username = SP.getString("userNameStore",null);
-        String password = SP.getString("passWordStore",null);
-        if (username != null && password != null )
-        {
+        String username = SP.getString("userNameStore", null);
+        String password = SP.getString("passWordStore", null);
+        if (username != null && password != null) {
             //username and password are present, do your stuff
-            full_name = SP.getString("full_name",null);
-            profile_pic_url = SP.getString("profile_pic_url",null);
-            usernameInsta = SP.getString("usernameInsta",null);
-             pk = SP.getString("pk",null);
-             longPk = SP.getInt("longPk",0);
+            full_name = SP.getString("full_name", null);
+            profile_pic_url = SP.getString("profile_pic_url", null);
+            usernameInsta = SP.getString("usernameInsta", null);
+            pk = SP.getString("pk", null);
+            longPk = SP.getInt("longPk", 0);
             profile_pic_id = SP.getString("profile_pic_id", null);
             no_of_followers = SP.getString("no_of_followers", null);
             no_of_following = SP.getString("no_of_following", null);
 
             Gson gson = new Gson();
             String json = SP.getString("followersUserNameList", null);
-            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            Type type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followersUserNameList = gson.fromJson(json, type);
             if (followersUserNameList == null) {
                 followersUserNameList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followersPicUrlList = gson.fromJson(json, type);
             if (followersPicUrlList == null) {
                 followersPicUrlList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followersFullNameList = gson.fromJson(json, type);
             if (followersFullNameList == null) {
                 followersFullNameList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followersPkList = gson.fromJson(json, type);
             if (followersPkList == null) {
                 followersPkList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followingUserNameList = gson.fromJson(json, type);
             if (followingUserNameList == null) {
                 followingUserNameList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followingPicUrlList = gson.fromJson(json, type);
             if (followingPicUrlList == null) {
                 followingPicUrlList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followingFullNameList = gson.fromJson(json, type);
             if (followingFullNameList == null) {
                 followingFullNameList = new ArrayList<>();
             }
 
-             gson = new Gson();
-             json = SP.getString("task list", null);
-             type = new TypeToken<ArrayList<String>>() {}.getType();
+            gson = new Gson();
+            json = SP.getString("task list", null);
+            type = new TypeToken<ArrayList<String>>() {
+            }.getType();
             followingPkList = gson.fromJson(json, type);
             if (followingPkList == null) {
                 followingPkList = new ArrayList<>();
@@ -369,5 +368,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

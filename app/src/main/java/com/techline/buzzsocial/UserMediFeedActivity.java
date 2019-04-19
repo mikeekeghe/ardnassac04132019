@@ -3,10 +3,10 @@ package com.techline.buzzsocial;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -20,9 +20,6 @@ import java.util.ArrayList;
 
 import dev.niekirk.com.instagram4android.Instagram4Android;
 import dev.niekirk.com.instagram4android.requests.InstagramGetRecentActivityRequest;
-import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
-import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 import dev.niekirk.com.instagram4android.requests.payload.StatusResult;
 
 public class UserMediFeedActivity extends AppCompatActivity {
@@ -132,21 +129,7 @@ public class UserMediFeedActivity extends AppCompatActivity {
             followingPicUrlList = extras.getStringArrayList("followingPicUrlList");
             followingFullNameList = extras.getStringArrayList("followingFullNameList");
             followingPkList = extras.getStringArrayList("followingPkList");
-            Log.d(TAG, "my full_name from Extra is :" + full_name);
-            Log.d(TAG, "my profile_pic_url from Extra is :" + profile_pic_url);
-            Log.d(TAG, "my usernameInsta from Extra is :" + usernameInsta);
-            Log.d(TAG, "my pk from Extra is :" + pk);
-            Log.d(TAG, "my profile_pic_id from Extra is :" + profile_pic_id);
-            Log.d(TAG, "my no_of_followers from Extra is :" + no_of_followers);
-            Log.d(TAG, "my followersUserNameList from Extra is :" + followersUserNameList);
-            Log.d(TAG, "my followersPicUrlList from Extra is :" + followersPicUrlList);
-            Log.d(TAG, "my followersFullNameList from Extra is :" + followersFullNameList);
-            Log.d(TAG, "my followersPkList from Extra is :" + followersPkList);
-            Log.d(TAG, "my no_of_following from Extra is :" + no_of_following);
-            Log.d(TAG, "my followingUserNameList from Extra is :" + followingUserNameList);
-            Log.d(TAG, "my followingPicUrlList from Extra is :" + followingPicUrlList);
-            Log.d(TAG, "my followingFullNameList from Extra is :" + followingFullNameList);
-            Log.d(TAG, "my followingPkList from Extra is :" + followingPkList);
+
             SP = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
             userNameStore = SP.getString("userNameStore",null);
             passWordStore = SP.getString("passWordStore",null);
