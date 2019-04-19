@@ -17,7 +17,7 @@
             android:layout_width="357dp"
             android:layout_height="161dp"
             android:layout_gravity="center"
-            android:background="#FFFFFF">
+            android:background="">
 
 
             <ImageView

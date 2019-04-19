@@ -2,6 +2,8 @@ package com.techline.buzzsocial;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +15,13 @@ import java.util.ArrayList;
 import dev.niekirk.com.instagram4android.Instagram4Android;
 import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramUnfollowRequest;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 
 public class ProcessUnfollowActivity extends AppCompatActivity {
+    public static final String MyPREFERENCES = "MyPrefs";
+    SharedPreferences SP;
     private static final String TAG = "PROCESS_UNFOLLOW";
     private boolean answer = false;
 
@@ -93,32 +98,48 @@ public class ProcessUnfollowActivity extends AppCompatActivity {
             return;
         }
 
+        SP = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        userNameStore = SP.getString("userNameStore", "empty");
+        passWordStore = SP.getString("passWordStore", "empty");
+        Log.d(TAG, "my userNameStore from Shared Preference is :" + userNameStore);
+        Log.d(TAG, "my passWordStore from Shared Preference is :" + passWordStore);
+
         Log.d(TAG,"inside flag checker >> follow");
 
+        try {
             status = unfollowMyUser(userNameStore,passWordStore, user_to_unfollow);
-           Log.d(TAG,"unfollowMyUser status >> "+status);
-        Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
-        mContext.startActivity(intent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG,"unfollowMyUser status >> "+status);
         Toast.makeText(mContext, "Un-Followed Succesfully", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, FollowingActivity.class);
+        mContext.startActivity(intent);
 
     }
 
-    public boolean unfollowMyUser(String userNameStore, String passWordStore, String user_to_unfollow) {
+    public boolean unfollowMyUser(String user, String pass, String user_2_unfollow) throws IOException,NullPointerException {
 
         //unfollow request
-        Instagram4Android instagram = Instagram4Android.builder().username(userNameStore).password(passWordStore).build();
+        Instagram4Android instagram = Instagram4Android.builder().username(user).password(pass).build();
+        Log.d(TAG, "Before setup");
+        instagram.setup();
+        Log.d(TAG, "Before login");
+        instagram.login();
         InstagramSearchUsernameResult result = null;
         try {
-            result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_to_unfollow));
+            result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_2_unfollow));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        InstagramUser user = result.getUser();
+        InstagramUser my_user = result.getUser();
         try {
-            instagram.sendRequest(new InstagramUnfollowRequest(user.getPk()));
+            instagram.sendRequest(new InstagramUnfollowRequest(my_user.getPk()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d(TAG, "after unfollow request");
 
         answer = true;
         return answer;
