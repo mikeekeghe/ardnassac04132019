@@ -16,21 +16,18 @@ import java.util.ArrayList;
 import dev.niekirk.com.instagram4android.Instagram4Android;
 import dev.niekirk.com.instagram4android.requests.InstagramFollowRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramSearchUsernameRequest;
-import dev.niekirk.com.instagram4android.requests.InstagramUnfollowRequest;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramSearchUsernameResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUser;
 
-public class UtilityActivity extends AppCompatActivity {
+public class ProcessFollowActivity extends AppCompatActivity {
 
-    private static final String TAG = "UTILITY";
+    private static final String TAG = "PROCESS_FOLLOW";
     private boolean answer = false;
 
     private Bundle extras;
     private String full_name="",profile_pic_url="",user_to_follow=""
             ,usernameInsta="",pk="",profile_pic_id="",user_to_unfollow="";
-    TextView tvDisplay_name, tvUserName, tvFolCount;
-    ImageView ivThumb;
-    ImageButton btnFollowers, btnUnFollowers;
+
     ArrayList<String> followersUserNameList = new ArrayList<String>();
     ArrayList<String> followersPicUrlList = new ArrayList<String>();
     ArrayList<String> followersPkList = new ArrayList<String>();
@@ -45,12 +42,13 @@ public class UtilityActivity extends AppCompatActivity {
     ArrayList<String> UsersToUnfollowArrayList = new ArrayList<String>();
     private String no_of_following;
     private String userNameStore="", passWordStore="", flag="";
-    private boolean status = false;
     private Context mContext;
+    private boolean status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_process_follow);
 
         extras = getIntent().getExtras();
         if (extras != null) {
@@ -100,49 +98,13 @@ public class UtilityActivity extends AppCompatActivity {
             return;
         }
 
-        if (flag == "FOLLOW"){
-            Log.d(TAG,"inside flag checker >> follow");
-            // add username to UsersToFollowArrayList
-            //UsersToFollowArrayList.add(user_to_follow);
-            //status = followMyUser(userNameStore,passWordStore);
-            //Log.d(TAG,"followMyUser status >> "+status);
-            Intent intent = new Intent(mContext.getApplicationContext(), FollowersActivity.class);
-            mContext.startActivity(intent);
-            Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
-        }else if (flag == "UNFOLLOW"){
-            Log.d(TAG,"inside flag checker >> follow");
-//            UsersToUnfollowArrayList.add(user_to_unfollow);
-
-//            status = unfollowMyUser(userNameStore,passWordStore);
-//            Log.d(TAG,"unfollowMyUser status >> "+status);
-            Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
-            mContext.startActivity(intent);
-            Toast.makeText(mContext, "Un-Followed Succesfully", Toast.LENGTH_SHORT).show();
-        }else{
-
-        }
-
-    }
-
-    public boolean unfollowMyUser(String userNameStore, String passWordStore, String user_to_unfollow) {
-
-        //unfollow request
-        Instagram4Android instagram = Instagram4Android.builder().username(userNameStore).password(passWordStore).build();
-        InstagramSearchUsernameResult result = null;
-        try {
-            result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_to_unfollow));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InstagramUser user = result.getUser();
-        try {
-            instagram.sendRequest(new InstagramUnfollowRequest(user.getPk()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        answer = true;
-        return answer;
+        Log.d(TAG,"inside flag checker >> follow");
+        status =false;
+        status = followMyUser(userNameStore,passWordStore,user_to_follow);
+        Log.d(TAG,"followMyUser status >> "+status);
+        Intent intent = new Intent(mContext.getApplicationContext(), FollowersActivity.class);
+        Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
+        startActivity(intent);
     }
 
     public boolean followMyUser(String userNameStore, String passWordStore, String user_to_unfollow)

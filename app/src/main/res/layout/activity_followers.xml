@@ -46,23 +46,6 @@
 
 
         </TableRow>
-        <TableRow
-            android:layout_width="357dp"
-            android:layout_height="161dp"
-            android:layout_gravity="center"
-            android:background="#FFFFFF">
 
-            <ImageButton
-                android:id="@+id/btnDone"
-                android:gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/btn_done"
-                android:layout_height="24dp"
-                android:layout_width="80dp" />
-
-        </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

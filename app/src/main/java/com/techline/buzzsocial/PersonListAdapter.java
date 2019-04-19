@@ -156,12 +156,9 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
             @Override
             public void onClick(View view) {
                 UsersToFollowArrayList.add(getItem(position).getUser_name());
-                Log.d(TAG,"UsersToFollowArrayList" + UsersToFollowArrayList);
-                Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
+                Intent intent = new Intent(mContext.getApplicationContext(), ProcessFollowActivity.class);
 
-                intent.putExtra("flag", "UNFOLLOW");
-                intent.putExtra("UsersToFollowArrayList", UsersToFollowArrayList);
-//                saveData();
+                intent.putExtra("user_to_follow",  getItem(position).getUser_name());
                Toast.makeText(mContext, getItem(position).getUser_name(), Toast.LENGTH_SHORT).show();
                 mContext.startActivity(intent);
             }

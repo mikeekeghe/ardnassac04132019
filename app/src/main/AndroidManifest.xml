@@ -13,12 +13,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UtilityActivity"></activity>
+        <activity android:name=".ProcessUnfollowActivity"></activity>
+        <activity android:name=".ProcessFollowActivity" />
+        <activity android:name=".UtilityActivity" />
         <activity
             android:name=".FollowingActivity"
+            android:label="Following"
             android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".FollowersActivity"
+            android:label="Followers"
             android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".HomeActivity"

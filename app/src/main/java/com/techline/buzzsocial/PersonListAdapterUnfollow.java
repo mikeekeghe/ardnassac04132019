@@ -141,12 +141,10 @@ class PersonListAdapterUnfollow extends ArrayAdapter<Person> {
 
                 UsersToUnfollowArrayList.add(getItem(position).getUser_name());
 
-                Intent intent = new Intent(mContext.getApplicationContext(), FollowingActivity.class);
+                Intent intent = new Intent(mContext.getApplicationContext(), ProcessUnfollowActivity.class);
 
-                intent.putExtra("flag", "UNFOLLOW");
-                intent.putExtra("UsersToUnfollowArrayList", UsersToUnfollowArrayList);
+                intent.putExtra("user_to_unfollow",  getItem(position).getUser_name());
                 Log.d(TAG,"UsersToUnfollowArrayList" + UsersToUnfollowArrayList);
-//                saveData();
                 Toast.makeText(mContext, getItem(position).getUser_name(), Toast.LENGTH_SHORT).show();
                 mContext.startActivity(intent);
             }

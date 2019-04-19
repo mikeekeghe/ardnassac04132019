@@ -87,12 +87,12 @@ public class HomeActivity extends AppCompatActivity {
             usernameInsta = extras.getString("usernameInsta");
             pk = extras.getString("pk");
             profile_pic_id = extras.getString("profile_pic_id");
-            no_of_followers = String.valueOf(extras.getInt("no_of_followers"));
+            no_of_followers = String.valueOf(extras.getString("no_of_followers"));
             followersUserNameList = extras.getStringArrayList("followersUserNameList");
             followersPicUrlList = extras.getStringArrayList("followersPicUrlList");
             followersFullNameList = extras.getStringArrayList("followersFullNameList");
             followersPkList = extras.getStringArrayList("followersPkList");
-            no_of_following = String.valueOf(extras.getInt("no_of_following"));
+            no_of_following = String.valueOf(extras.getString("no_of_following"));
             followingUserNameList = extras.getStringArrayList("followingUserNameList");
             followingPicUrlList = extras.getStringArrayList("followingPicUrlList");
             followingFullNameList = extras.getStringArrayList("followingFullNameList");
