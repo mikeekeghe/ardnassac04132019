@@ -48,12 +48,12 @@ public class ProcessFollowActivity extends AppCompatActivity {
     private String userNameStore="", passWordStore="", flag="";
     private Context mContext;
     private boolean status;
-
+TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_process_follow);
-
+        textView = findViewById(R.id.textView);
         extras = getIntent().getExtras();
         if (extras != null) {
 
@@ -114,9 +114,9 @@ public class ProcessFollowActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        textView.setText("Processing");
         Log.d(TAG,"followMyUser status >> "+status);
         Intent intent = new Intent(this, FollowersActivity.class);
-        Toast.makeText(mContext, "Followed Succesfully", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 

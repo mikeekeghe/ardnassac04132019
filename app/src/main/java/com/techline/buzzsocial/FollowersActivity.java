@@ -111,7 +111,7 @@ public class FollowersActivity extends AppCompatActivity {
         }
         loadDataInListView(mListView);
         tvData = findViewById(R.id.tvData);
-        tvData.setText(no_of_following + " Unfollowers ");
+        tvData.setText(no_of_followers + " followers ");
 
     }
 

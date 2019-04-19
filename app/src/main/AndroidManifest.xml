@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProcessUnfollowActivity"></activity>
+        <activity android:name=".UserMediFeedActivity"></activity>
+        <activity android:name=".ProcessUnfollowActivity" />
         <activity android:name=".ProcessFollowActivity" />
         <activity android:name=".UtilityActivity" />
         <activity

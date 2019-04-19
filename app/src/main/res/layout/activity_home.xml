@@ -11,13 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="16dp">
+        tools:layout_editor_absoluteY="16dp"
+        android:background="#fff"
+        >
 
         <TableRow
             android:layout_width="357dp"
-            android:layout_height="161dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
-            android:background="">
+            android:background="@drawable/bgtop">
 
 
             <ImageView
@@ -34,7 +36,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF">
+            android:background="#FF5722">
 
             <TextView
                 android:id="@+id/tvDisplay_name"
@@ -51,7 +53,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF">
+            android:background="#FF5722">
 
             <TextView
                 android:id="@+id/tvUserName"
@@ -65,7 +67,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF">
+            android:background="#FF5722">
 
              <TextView
                 android:id="@+id/tvFolCount"
@@ -79,7 +81,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF">
+            android:background="#fff">
 
             <ImageButton
                 android:id="@+id/btnFollowers"

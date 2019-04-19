@@ -15,7 +15,7 @@
         android:layout_height="350dp"
         android:max="100"
         android:paddingLeft="150dp"
-        android:paddingTop="150dp"
+        android:paddingTop="300dp"
         android:paddingRight="150dp"
         android:paddingBottom="150dp"
         android:progress="50"

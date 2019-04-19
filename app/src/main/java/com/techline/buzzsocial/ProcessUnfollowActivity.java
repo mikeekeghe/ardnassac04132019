@@ -112,7 +112,6 @@ public class ProcessUnfollowActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.d(TAG,"unfollowMyUser status >> "+status);
-        Toast.makeText(mContext, "Un-Followed Succesfully", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(this, FollowingActivity.class);
         mContext.startActivity(intent);
