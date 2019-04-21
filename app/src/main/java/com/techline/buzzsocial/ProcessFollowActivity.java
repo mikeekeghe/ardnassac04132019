@@ -29,8 +29,7 @@ public class ProcessFollowActivity extends AppCompatActivity {
     private boolean answer = false;
 
     private Bundle extras;
-    private String full_name="",profile_pic_url="",user_to_follow=""
-            ,usernameInsta="",pk="",profile_pic_id="",user_to_unfollow="";
+    private String full_name = "", profile_pic_url = "", user_to_follow = "", usernameInsta = "", pk = "", profile_pic_id = "", user_to_unfollow = "";
 
     ArrayList<String> followersUserNameList = new ArrayList<String>();
     ArrayList<String> followersPicUrlList = new ArrayList<String>();
@@ -45,10 +44,11 @@ public class ProcessFollowActivity extends AppCompatActivity {
     ArrayList<String> UsersToFollowArrayList = new ArrayList<String>();
     ArrayList<String> UsersToUnfollowArrayList = new ArrayList<String>();
     private String no_of_following;
-    private String userNameStore="", passWordStore="", flag="";
+    private String userNameStore = "", passWordStore = "", flag = "";
     private Context mContext;
     private boolean status;
-TextView textView;
+    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,15 +92,15 @@ TextView textView;
         passWordStore = SP.getString("passWordStore", "empty");
         Log.d(TAG, "my userNameStore from Shared Preference is :" + userNameStore);
         Log.d(TAG, "my passWordStore from Shared Preference is :" + passWordStore);
-        Log.d(TAG,"inside flag checker >> follow");
-        status =false;
+        Log.d(TAG, "inside flag checker >> follow");
+        status = false;
         try {
-            status = followMyUser(userNameStore,passWordStore,user_to_follow);
+            status = followMyUser(userNameStore, passWordStore, user_to_follow);
         } catch (IOException e) {
             e.printStackTrace();
         }
         textView.setText("Processing");
-        Log.d(TAG,"followMyUser status >> "+status);
+        Log.d(TAG, "followMyUser status >> " + status);
         Intent it = new Intent(this, FollowersActivity.class);
         it.putExtra("full_name", full_name);
         it.putExtra("profile_pic_url", profile_pic_url);
@@ -114,14 +114,15 @@ TextView textView;
         it.putExtra("followersPkList", followersPkList);
         it.putExtra("followingUserNameList", followingUserNameList);
         it.putExtra("no_of_following", no_of_following);
-        it.putExtra("followingPicUrlList", followingPicUrlList);;
+        it.putExtra("followingPicUrlList", followingPicUrlList);
+        ;
         it.putExtra("followingFullNameList", followingFullNameList);
         it.putExtra("followingPkList", followingPkList);
 
         startActivity(it);
     }
 
-    public boolean followMyUser(String user, String pass, String user_2_follow) throws IOException,NullPointerException {
+    public boolean followMyUser(String user, String pass, String user_2_follow) throws IOException, NullPointerException {
         //follow request
         Instagram4Android instagram = Instagram4Android.builder().username(user).password(pass).build();
 
@@ -130,7 +131,7 @@ TextView textView;
         Log.d(TAG, "Before setup");
         instagram.setup();
         Log.d(TAG, "Before login");
-     instagram.login();
+        instagram.login();
         InstagramSearchUsernameResult result = null;
         try {
             result = instagram.sendRequest(new InstagramSearchUsernameRequest(user_2_follow));
@@ -143,6 +144,8 @@ TextView textView;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         Log.d(TAG, "after follow request");
         answer = true;
         return answer;

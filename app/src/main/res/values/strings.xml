@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">BuzzSocial</string>
+    <string name="app_name">BuzzzSocial</string>
+    <string name="facebook_app_id">2238736979776596</string>
+    <string name="facebook_client_token">ab06117ac268f56d63fbd3cd28665a04</string>
+    <string name="fb_login_protocol_scheme">fb2238736979776596</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

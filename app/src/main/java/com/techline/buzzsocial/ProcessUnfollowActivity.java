@@ -153,6 +153,8 @@ public class ProcessUnfollowActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         Log.d(TAG, "after unfollow request");
 
         answer = true;

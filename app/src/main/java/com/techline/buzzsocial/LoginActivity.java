@@ -3,6 +3,7 @@ package com.techline.buzzsocial;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +14,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dev.niekirk.com.instagram4android.Instagram4Android;
@@ -29,8 +37,14 @@ import dev.niekirk.com.instagram4android.requests.payload.InstagramLoggedUser;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginResult;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUserSummary;
 import dev.niekirk.com.instagram4android.requests.payload.StatusResult;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class LoginActivity extends AppCompatActivity {
+    LoginButton loginButton;
+    CallbackManager callbackManager;
+    private static final String EMAIL = "email";
     public static final String MyPREFERENCES = "MyPrefs";
     private static String TAG = "LOGIN";
     private String userNameStore = "", passWordStore = "";
@@ -57,11 +71,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
+        if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
         simpleProgressBar = (ProgressBar) findViewById(R.id.progressbar); // initiate the progress bar
         maxValue = simpleProgressBar.getMax(); // get maximum value of the progress bar
         progressValue = simpleProgressBar.getProgress(); // get progress value from the progress bar
@@ -206,7 +222,51 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        initialiseDbControls();
+        loginWithFB();
+    }
 
+    private void loginWithFB() {
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                AccessToken accessToken = loginResult.getAccessToken();
+                Log.d(TAG, "accessToken>> "+ accessToken);
+                Instagram4Android instagram = Instagram4Android.builder().username("").password(accessToken.toString()).build();
+                instagram.setup();
+                try {
+                    InstagramLoginResult result = instagram.login();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                Log.d(TAG, "FB Login Cancelled ");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                Log.d(TAG, "FB Login Error " + exception.getMessage());
+            }
+        });
+    }
+
+    private void initialiseDbControls() {
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void populatePreferences() {
@@ -374,4 +434,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
+
 }

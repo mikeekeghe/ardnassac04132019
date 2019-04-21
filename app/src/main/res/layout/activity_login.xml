@@ -12,7 +12,7 @@
         android:id="@+id/progressbar"
         style="?android:progressBarStyleHorizontal"
         android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_height="550dp"
         android:max="100"
         android:paddingLeft="150dp"
         android:paddingTop="300dp"
@@ -122,6 +122,15 @@
             android:padding="16dp"
             android:layout_marginBottom="50dp"
             android:letterSpacing="0.2"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
+
         <TextView
             android:id="@+id/sup"
             android:layout_width="match_parent"
